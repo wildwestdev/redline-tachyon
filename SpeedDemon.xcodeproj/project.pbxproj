@@ -1,0 +1,786 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 90;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA1F81532EE153E5004E8D1C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA1F81122EE14D7B004E8D1C /* WidgetKit.framework */; };
+		AA1F81542EE153E5004E8D1C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA1F81142EE14D7B004E8D1C /* SwiftUI.framework */; };
+		AA1F81652EE153E7004E8D1C /* Speed Demon WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA1F81522EE153E5004E8D1C /* Speed Demon WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AAB8552A2EE6EC3C00A3A7B8 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAB855292EE6EC3C00A3A7B8 /* AppIntents.framework */; };
+		AB10000D2F00000000A1A1A1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB10000C2F00000000A1A1A1 /* XCTest.framework */; };
+		AB10000E2F00000000A1A1A1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB10000C2F00000000A1A1A1 /* XCTest.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA1F81632EE153E7004E8D1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE201E12ED6A3A90074C5EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1F81512EE153E5004E8D1C;
+			remoteInfo = "Speed Demon WidgetExtension";
+		};
+		AB1000152F00000000A1A1A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE201E12ED6A3A90074C5EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAE201E82ED6A3A90074C5EE;
+			remoteInfo = "Speed Demon";
+		};
+		AB1000162F00000000A1A1A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAE201E12ED6A3A90074C5EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1F81512EE153E5004E8D1C;
+			remoteInfo = "Speed Demon WidgetExtension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA1F812B2EE14D7D004E8D1C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				AA1F81652EE153E7004E8D1C /* Speed Demon WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AA1F81122EE14D7B004E8D1C /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		AA1F81142EE14D7B004E8D1C /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		AA1F81522EE153E5004E8D1C /* Speed Demon WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Speed Demon WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAB855292EE6EC3C00A3A7B8 /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = SDKROOT; };
+		AAE201E92ED6A3A90074C5EE /* Speed Demon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Speed Demon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB10000A2F00000000A1A1A1 /* Speed DemonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Speed DemonTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB10000B2F00000000A1A1A1 /* Speed DemonWidgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Speed DemonWidgetTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB10000C2F00000000A1A1A1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = System/Library/Frameworks/XCTest.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA1F81662EE153E7004E8D1C /* Exceptions for "Widget" folder in "Speed Demon WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */;
+		};
+		AA1F816B2EE15873004E8D1C /* Exceptions for "Sources" folder in "Speed Demon WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/SpeedDemonActivityAttributes.swift,
+			);
+			target = AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA1F81552EE153E5004E8D1C /* Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA1F81662EE153E7004E8D1C /* Exceptions for "Widget" folder in "Speed Demon WidgetExtension" target */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
+		AAE201EB2ED6A3A90074C5EE /* Sources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA1F816B2EE15873004E8D1C /* Exceptions for "Sources" folder in "Speed Demon WidgetExtension" target */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		AB1000012F00000000A1A1A1 /* Tests/App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests/App;
+			sourceTree = "<group>";
+		};
+		AB1000022F00000000A1A1A1 /* Tests/Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests/Widget;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA1F814F2EE153E5004E8D1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				AA1F81542EE153E5004E8D1C /* SwiftUI.framework in Frameworks */,
+				AA1F81532EE153E5004E8D1C /* WidgetKit.framework in Frameworks */,
+				AAB8552A2EE6EC3C00A3A7B8 /* AppIntents.framework in Frameworks */,
+			);
+		};
+		AAE201E62ED6A3A90074C5EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		AB1000072F00000000A1A1A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				AB10000D2F00000000A1A1A1 /* XCTest.framework in Frameworks */,
+			);
+		};
+		AB1000082F00000000A1A1A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				AB10000E2F00000000A1A1A1 /* XCTest.framework in Frameworks */,
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA1F81112EE14D7B004E8D1C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB10000C2F00000000A1A1A1 /* XCTest.framework */,
+				AAB855292EE6EC3C00A3A7B8 /* AppIntents.framework */,
+				AA1F81122EE14D7B004E8D1C /* WidgetKit.framework */,
+				AA1F81142EE14D7B004E8D1C /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AAE201E02ED6A3A90074C5EE = {
+			isa = PBXGroup;
+			children = (
+				AAE201EB2ED6A3A90074C5EE /* Sources */,
+				AB1000012F00000000A1A1A1 /* Tests/App */,
+				AB1000022F00000000A1A1A1 /* Tests/Widget */,
+				AA1F81552EE153E5004E8D1C /* Widget */,
+				AA1F81112EE14D7B004E8D1C /* Frameworks */,
+				AAE201EA2ED6A3A90074C5EE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AAE201EA2ED6A3A90074C5EE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AAE201E92ED6A3A90074C5EE /* Speed Demon.app */,
+				AA1F81522EE153E5004E8D1C /* Speed Demon WidgetExtension.appex */,
+				AB10000A2F00000000A1A1A1 /* Speed DemonTests.xctest */,
+				AB10000B2F00000000A1A1A1 /* Speed DemonWidgetTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA1F81672EE153E7004E8D1C /* Build configuration list for PBXNativeTarget "Speed Demon WidgetExtension" */;
+			buildPhases = (
+				AA1F814E2EE153E5004E8D1C /* Sources */,
+				AA1F814F2EE153E5004E8D1C /* Frameworks */,
+				AA1F81502EE153E5004E8D1C /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA1F81552EE153E5004E8D1C /* Widget */,
+			);
+			name = "Speed Demon WidgetExtension";
+			productName = "Speed Demon WidgetExtension";
+			productReference = AA1F81522EE153E5004E8D1C /* Speed Demon WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		AAE201E82ED6A3A90074C5EE /* Speed Demon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAE201F42ED6A3AB0074C5EE /* Build configuration list for PBXNativeTarget "Speed Demon" */;
+			buildPhases = (
+				AAE201E52ED6A3A90074C5EE /* Sources */,
+				AAE201E62ED6A3A90074C5EE /* Frameworks */,
+				AAE201E72ED6A3A90074C5EE /* Resources */,
+				AA1F812B2EE14D7D004E8D1C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA1F81642EE153E7004E8D1C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AAE201EB2ED6A3A90074C5EE /* Sources */,
+			);
+			name = "Speed Demon";
+			productName = "Speed Demon";
+			productReference = AAE201E92ED6A3A90074C5EE /* Speed Demon.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AB1000032F00000000A1A1A1 /* Speed DemonTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB10000F2F00000000A1A1A1 /* Build configuration list for PBXNativeTarget "Speed DemonTests" */;
+			buildPhases = (
+				AB1000052F00000000A1A1A1 /* Sources */,
+				AB1000072F00000000A1A1A1 /* Frameworks */,
+				AB1000092F00000000A1A1A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB1000172F00000000A1A1A1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AB1000012F00000000A1A1A1 /* Tests/App */,
+			);
+			name = "Speed DemonTests";
+			productName = "Speed DemonTests";
+			productReference = AB10000A2F00000000A1A1A1 /* Speed DemonTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AB1000042F00000000A1A1A1 /* Speed DemonWidgetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB1000122F00000000A1A1A1 /* Build configuration list for PBXNativeTarget "Speed DemonWidgetTests" */;
+			buildPhases = (
+				AB1000062F00000000A1A1A1 /* Sources */,
+				AB1000082F00000000A1A1A1 /* Frameworks */,
+				AB10000A2F00000000A1A1A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB1000182F00000000A1A1A1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AB1000022F00000000A1A1A1 /* Tests/Widget */,
+			);
+			name = "Speed DemonWidgetTests";
+			productName = "Speed DemonWidgetTests";
+			productReference = AB10000B2F00000000A1A1A1 /* Speed DemonWidgetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AAE201E12ED6A3A90074C5EE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					AA1F81512EE153E5004E8D1C = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					AAE201E82ED6A3A90074C5EE = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					AB1000032F00000000A1A1A1 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = AAE201E82ED6A3A90074C5EE;
+					};
+					AB1000042F00000000A1A1A1 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = AA1F81512EE153E5004E8D1C;
+					};
+				};
+			};
+			buildConfigurationList = AAE201E42ED6A3A90074C5EE /* Build configuration list for PBXProject "SpeedDemon" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AAE201E02ED6A3A90074C5EE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 90;
+			productRefGroup = AAE201EA2ED6A3A90074C5EE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AAE201E82ED6A3A90074C5EE /* Speed Demon */,
+				AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */,
+				AB1000032F00000000A1A1A1 /* Speed DemonTests */,
+				AB1000042F00000000A1A1A1 /* Speed DemonWidgetTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA1F81502EE153E5004E8D1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		AAE201E72ED6A3A90074C5EE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		AB1000092F00000000A1A1A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		AB10000A2F00000000A1A1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA1F814E2EE153E5004E8D1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		AAE201E52ED6A3A90074C5EE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		AB1000052F00000000A1A1A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		AB1000062F00000000A1A1A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA1F81642EE153E7004E8D1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */;
+			targetProxy = AA1F81632EE153E7004E8D1C /* PBXContainerItemProxy */;
+		};
+		AB1000172F00000000A1A1A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAE201E82ED6A3A90074C5EE /* Speed Demon */;
+			targetProxy = AB1000152F00000000A1A1A1 /* PBXContainerItemProxy */;
+		};
+		AB1000182F00000000A1A1A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1F81512EE153E5004E8D1C /* Speed Demon WidgetExtension */;
+			targetProxy = AB1000162F00000000A1A1A1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AA1F81682EE153E7004E8D1C /* Debug configuration for PBXNativeTarget "Speed Demon WidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Speed Demon Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "au.com.nickelrose.speed-demon.speed-demon-widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA1F81692EE153E7004E8D1C /* Release configuration for PBXNativeTarget "Speed Demon WidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Speed Demon Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "au.com.nickelrose.speed-demon.speed-demon-widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AAE201F22ED6A3AB0074C5EE /* Debug configuration for PBXProject "SpeedDemon" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B4ZWQUWRMP;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AAE201F32ED6A3AB0074C5EE /* Release configuration for PBXProject "SpeedDemon" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B4ZWQUWRMP;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AAE201F52ED6A3AB0074C5EE /* Debug configuration for PBXNativeTarget "Speed Demon" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpeedDemon.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Speed-Demon-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Speed Demon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses GPS to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Used to improve speed accuracy at low speeds by combining motion and GPS data.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportsCarPlay = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "au.com.nickelrose.speed-demon";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AAE201F62ED6A3AB0074C5EE /* Release configuration for PBXNativeTarget "Speed Demon" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpeedDemon.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Speed-Demon-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Speed Demon";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app uses your location to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app uses GPS to show your speed and calculate trip distances.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Used to improve speed accuracy at low speeds by combining motion and GPS data.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportsCarPlay = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "au.com.nickelrose.speed-demon";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[arch=*]" = SHOW_DISCLAIMER_TEST_TOGGLE;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AB1000102F00000000A1A1A1 /* Debug configuration for PBXNativeTarget "Speed DemonTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "nickelrose.com.au.Speed-DemonTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Speed Demon.app/Speed Demon";
+				TEST_TARGET_NAME = "Speed Demon";
+			};
+			name = Debug;
+		};
+		AB1000112F00000000A1A1A1 /* Release configuration for PBXNativeTarget "Speed DemonTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "nickelrose.com.au.Speed-DemonTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Speed Demon.app/Speed Demon";
+				TEST_TARGET_NAME = "Speed Demon";
+			};
+			name = Release;
+		};
+		AB1000132F00000000A1A1A1 /* Debug configuration for PBXNativeTarget "Speed DemonWidgetTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "nickelrose.com.au.Speed-DemonWidgetTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "";
+				TEST_TARGET_NAME = "Speed Demon WidgetExtension";
+			};
+			name = Debug;
+		};
+		AB1000142F00000000A1A1A1 /* Release configuration for PBXNativeTarget "Speed DemonWidgetTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 52;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "nickelrose.com.au.Speed-DemonWidgetTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "";
+				TEST_TARGET_NAME = "Speed Demon WidgetExtension";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA1F81672EE153E7004E8D1C /* Build configuration list for PBXNativeTarget "Speed Demon WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA1F81682EE153E7004E8D1C /* Debug configuration for PBXNativeTarget "Speed Demon WidgetExtension" */,
+				AA1F81692EE153E7004E8D1C /* Release configuration for PBXNativeTarget "Speed Demon WidgetExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		AAE201E42ED6A3A90074C5EE /* Build configuration list for PBXProject "SpeedDemon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAE201F22ED6A3AB0074C5EE /* Debug configuration for PBXProject "SpeedDemon" */,
+				AAE201F32ED6A3AB0074C5EE /* Release configuration for PBXProject "SpeedDemon" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		AAE201F42ED6A3AB0074C5EE /* Build configuration list for PBXNativeTarget "Speed Demon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAE201F52ED6A3AB0074C5EE /* Debug configuration for PBXNativeTarget "Speed Demon" */,
+				AAE201F62ED6A3AB0074C5EE /* Release configuration for PBXNativeTarget "Speed Demon" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		AB10000F2F00000000A1A1A1 /* Build configuration list for PBXNativeTarget "Speed DemonTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB1000102F00000000A1A1A1 /* Debug configuration for PBXNativeTarget "Speed DemonTests" */,
+				AB1000112F00000000A1A1A1 /* Release configuration for PBXNativeTarget "Speed DemonTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		AB1000122F00000000A1A1A1 /* Build configuration list for PBXNativeTarget "Speed DemonWidgetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB1000132F00000000A1A1A1 /* Debug configuration for PBXNativeTarget "Speed DemonWidgetTests" */,
+				AB1000142F00000000A1A1A1 /* Release configuration for PBXNativeTarget "Speed DemonWidgetTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AAE201E12ED6A3A90074C5EE /* Project object */;
+}

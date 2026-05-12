@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Xcode user/workspace state
+xcuserdata/
+*.xcuserstate
+
+# SwiftPM build artifacts
+.build/
+
+# Repository-generated validation/test artifacts
+build/

@@ -1,0 +1,57 @@
+# Top-level EditorConfig file
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown and text files – allow some trailing spaces (for lists, etc.)
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 0
+
+[*.txt]
+trim_trailing_whitespace = false
+max_line_length = 0
+
+# Swift source files – Apple-like
+[*.swift]
+indent_style = space
+indent_size = 2
+tab_width = 2
+max_line_length = 100
+
+# Xcode project/workspace files
+[*.xcodeproj]
+indent_style = space
+indent_size = 2
+
+[*.xcworkspace]
+indent_style = space
+indent_size = 2
+
+# JSON / YAML / config
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Git-related files
+[.gitignore]
+end_of_line = lf
+insert_final_newline = true

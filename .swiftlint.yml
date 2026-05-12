@@ -1,0 +1,266 @@
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - .build
+  - build
+  - DerivedData
+
+reporter: "xcode"
+
+strict: true
+
+analyzer_rules:
+  - explicit_self
+  - unused_declaration
+  - unused_import
+
+disabled_rules:
+  # SwiftFormat owns layout / formatting.
+  - attributes
+  - comment_spacing
+  - conditional_returns_on_newline
+  - multiline_arguments
+  - multiline_arguments_brackets
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - multiline_parameters_brackets
+  - opening_brace
+  - statement_position
+  - trailing_whitespace
+  - vertical_whitespace
+  - vertical_whitespace_between_cases
+
+opt_in_rules:
+  - array_init
+  - closure_end_indentation
+  - closure_spacing
+  - collection_alignment
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - convenience_type
+  - discouraged_assert
+  - discouraged_direct_init
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - explicit_init
+  - fatal_error_message
+  - file_name
+  - file_types_order
+  - first_where
+  - flatmap_over_map_reduce
+  - force_unwrapping
+  - implicit_return
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - last_where
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prefer_self_in_static_references
+  - prefer_zero_over_explicit_init
+  - private_action
+  - private_outlet
+  - private_over_fileprivate
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - reduce_into
+  - return_value_from_void_function
+  - shorthand_operator
+  - sorted_first_last
+  - switch_case_on_newline
+  - toggle_bool
+  - type_contents_order
+  - unavailable_function
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+  - missing_docs
+  
+missing_docs:
+  excludes_extensions: false
+  excludes_inherited_types: false
+
+file_header:
+  required_pattern: |
+    ^//==============================================================\n
+    //  File: .+\.swift\n
+    //  Project: .+\n
+    //\n
+    //  Created by Craig Little on \d{2}/\d{2}/\d{4}\n
+    //  © \d{4} Craig Little\. All rights reserved\.\n
+    //\n
+    //  Version: .+\n
+    //  Last Modified: \d{2}/\d{2}/\d{4}\n
+    //  Maintainer: Craig Little\n
+    //\n
+    //  Description:\n
+    //    .+\n
+    //\n
+    //  Changes:\n
+    //  Author\s+Date\s+Change\n
+    //  ----------------------------------------------------------------------------------\n
+    (?://  Craig Little\s+\d{2}/\d{2}/\d{4}\s+.+\n)*
+
+    //==============================================================\n
+    //\n
+    // SPDX-FileCopyrightText: \d{4} Craig Little\n
+    // SPDX-License-Identifier: GPL-3\.0-or-later\n
+    //\n
+
+line_length:
+  warning: 140
+  error: 180
+  ignores_urls: true
+  ignores_function_declarations: false
+  ignores_comments: false
+
+file_length:
+  warning: 600
+  error: 900
+  ignore_comment_only_lines: true
+
+type_body_length:
+  warning: 300
+  error: 450
+
+function_body_length:
+  warning: 60
+  error: 90
+
+function_parameter_count:
+  warning: 5
+  error: 7
+
+cyclomatic_complexity:
+  warning: 10
+  error: 16
+  ignores_case_statements: true
+
+nesting:
+  type_level:
+    warning: 2
+    error: 3
+  function_level:
+    warning: 2
+    error: 3
+
+large_tuple:
+  warning: 3
+  error: 4
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 2
+  max_length:
+    warning: 40
+    error: 55
+  excluded:
+    - id
+    - x
+    - y
+    - z
+    - i
+    - j
+  validates_start_with_lowercase: true
+
+type_name:
+  min_length:
+    warning: 3
+  max_length:
+    warning: 40
+    error: 50
+
+force_cast: error
+force_try: error
+force_unwrapping: error
+
+implicitly_unwrapped_optional: error
+
+todo: error
+
+type_contents_order:
+  order:
+    - [case]
+    - [type_alias, associated_type]
+    - [subtype]
+    - [type_property]
+    - [instance_property]
+    - [ib_inspectable]
+    - [ib_outlet]
+    - [initializer]
+    - [type_method]
+    - [view_life_cycle_method]
+    - [ib_action, ib_segue_action]
+    - [other_method]
+    - [subscript]
+    - [deinitializer]
+
+file_types_order:
+  order:
+    - [supporting_type]
+    - [main_type]
+    - [extension]
+    - [preview_provider]
+    - [library_content_provider]
+
+custom_rules:
+
+  no_todo:
+    name: "TODO Not Allowed"
+    regex: "\\bTODO\\b"
+    message: "TODO comments are not permitted. Create tracked work instead."
+    severity: error
+
+  no_fixme:
+    name: "FIXME Not Allowed"
+    regex: "\\bFIXME\\b"
+    message: "FIXME comments are not permitted. Create tracked work instead."
+    severity: error
+
+  no_hack:
+    name: "HACK Not Allowed"
+    regex: "\\bHACK\\b"
+    message: "HACK comments are not permitted. Create tracked work instead."
+    severity: error
+
+  anyobject_protocol:
+    name: "AnyObject Protocol"
+    regex: '\\bprotocol\\s+\\w+\\s*:\\s*class\\b'
+    included: ".*\\.swift$"
+    message: "Use AnyObject rather than class for class-only protocols."
+    severity: warning
+
+  vague_variable_names:
+    name: "Vague Variable Names"
+    regex: '\\b(let|var)\\s+(data|value|item|thing|temp|tmp|obj|object|stuff)\\b'
+    message: "Use a descriptive variable name."
+    severity: warning
+
+  vague_type_names:
+    name: "Vague Type Names"
+    regex: '\\b(class|struct|enum)\\s+(Helper|Utility|Util|Handler|Manager2|Thing)\\b'
+    message: "Avoid vague type names."
+    severity: error
+
+  no_all_caps_constants:
+    name: "No ALL_CAPS Constants"
+    regex: '\\b(let|static let)\\s+[A-Z0-9_]{3,}\\b'
+    message: "Constants must use lowerCamelCase."
+    severity: error
+
+  no_interface_prefix_protocols:
+    name: "No I-Prefixed Protocols"
+    regex: '\\bprotocol\\s+I[A-Z]\\w*'
+    message: "Do not prefix protocols with I."
+    severity: error
+
+  comment_mark_format:
+    name: "MARK Format"
+    regex: '// MARK:[^ -]'
+    message: "Use // MARK: - Section Name format."
+    severity: warning
+

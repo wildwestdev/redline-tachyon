@@ -1,0 +1,102 @@
+version: 1
+
+project:
+  name: speed-demon
+  display_name: Speed Demon
+  bundle_identifier: au.com.nickelrose.speed-demon
+  repository_type: hybrid
+  platforms:
+    - ios
+
+xcode:
+  project_file: SpeedDemon.xcodeproj
+  workspace_file: ""
+  shared_scheme_path: SpeedDemon.xcodeproj/xcshareddata/xcschemes
+  project_created_manually: true
+  allow_agent_to_create_initial_xcodeproj: false
+  schemes:
+    ios: SpeedDemon
+
+versioning:
+  marketing_version:
+    source: xcodeproj
+    key: MARKETING_VERSION
+    increment_policy: manual_only
+  build_number:
+    enabled: true
+    source: xcodeproj
+    key: CURRENT_PROJECT_VERSION
+    increment_scope: per_gates_run
+    allow_external_config_as_canonical_source: false
+    current_gap: increment_script_missing_until_created
+
+paths:
+  artifact_root: build
+  build_artifacts: build/artifacts
+  test_artifacts: build/tests
+  validation_logs: build/validation
+  localisation_root: Sources/Resources
+  current_localisation_gap: localisation_root_missing_until_created
+  derived_data:
+    ios_validation: /tmp/SpeedDemon-DerivedData-ios
+    tests: /tmp/SpeedDemon-DerivedData-test
+
+commands_profile: speed_demon
+
+testing:
+  enabled: true
+  require_tests_for_new_types: true
+  require_tests_for_new_methods: true
+  require_tests_for_new_logic_paths: true
+  require_existing_tests_to_be_updated_when_behavior_changes: true
+  fail_task_when_required_tests_fail: true
+  forbid_untested_logic: true
+  changed_scope_only_by_default: true
+  full_regression_triggers:
+    - explicit_request
+    - shared_core_logic_changed
+    - schema_changed
+    - configuration_changed
+    - release_build
+
+domain_rules:
+  single_user_only_v1: true
+  preserve_offline_first_behavior: true
+  all_user_data_locally_usable: true
+  require_cloudkit_safe_models: true
+  cloudkit_private_database_only: true
+  forbid_multi_user_sharing_v1: true
+  require_updated_at_on_edit_paths: true
+  require_export_paths_to_remain_valid: true
+  require_photo_original_and_thumbnail_persistence: true
+
+localisation:
+  require_user_facing_text_in_localisation_resources: true
+  forbid_inline_user_facing_strings_in_swift: true
+  include:
+    - ui_labels
+    - button_titles
+    - alerts
+    - validation_messages
+    - user_visible_error_messages
+    - empty_state_text
+    - debug_visible_messages
+  current_gap: localisation_resource_structure_missing
+
+configuration:
+  required_types:
+    - AppConfig
+    - UserSettings
+    - ConfigurationProvider
+  centralise_global_constants: true
+  require_settings_screen_for_user_adjustable_values: true
+  forbid_hardcoded_system_configuration_values: true
+  forbid_magic_numbers: true
+  require_named_local_constants_for_local_limits: true
+
+overrides:
+  notes: >
+    This canary reflects the actual current repository structure. Doctor and gate
+    checks should flag missing increment-script, localisation-root, and test-target
+    infrastructure as current implementation gaps rather than silently downgrading
+    the policy.

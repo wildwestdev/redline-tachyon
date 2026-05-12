@@ -1,0 +1,266 @@
+version: 1
+
+profiles:
+  speed_demon:
+    description: >
+      Command profile for the current checked-in Speed Demon repository.
+      This reflects the real Xcode project, real shared schemes, current script layout,
+      and current implementation gaps that doctor and gates should report explicitly.
+
+
+    repository_type: hybrid
+
+    xcode:
+      project_file: SpeedDemon.xcodeproj
+      shared_schemes:
+        ios: SpeedDemon
+
+    paths:
+      build_artifacts: build/artifacts
+      test_artifacts: build/tests
+      validation_logs: build/validation
+
+    run:
+      preflight:
+        - name: ensure_repo_owned_build_directories
+          run: mkdir -p build/artifacts build/tests build/validation
+          applies_to_builds:
+            - ios_simulator
+            - ios_device
+
+        - name: verify_project_file
+          run: test -f SpeedDemon.xcodeproj/project.pbxproj
+          applies_to_builds:
+            - ios_simulator
+            - ios_device
+
+        - name: verify_ios_scheme
+          run: test -f SpeedDemon.xcodeproj/xcshareddata/xcschemes/SpeedDemon.xcscheme
+          applies_to_builds:
+            - ios_simulator
+            - ios_device
+
+      once:
+        - name: increment_build_number
+          run: ./Tools/increment_build_number.sh
+          required: true
+          allow_missing: false
+          condition: versioning.build_number.enabled
+          current_gap: false
+          current_gap_reason: >
+            .
+
+    build_steps:
+      prebuild: []
+      postbuild: []
+
+    quality:
+      enabled: true
+      steps:
+        - name: swiftformat
+          description: Check Swift formatting without modifying source files
+          required: true
+          allow_missing: false
+          command: swiftformat . --lint
+          log_path: build/validation/swiftformat.log
+
+        - name: swiftlint
+          description: Run SwiftLint in strict mode
+          required: true
+          allow_missing: false
+          command: swiftlint lint --strict
+          log_path: build/validation/swiftlint.log
+
+        - name: documentation_audit
+          description: Validate documentation density and architecture comment standards
+          required: true
+          allow_missing: false
+          command: python3 ~/Development/swift-agent/runtime/python/check-docs.py .
+          log_path: build/validation/documentation-audit.log
+          
+    build:
+      default: ios_simulator
+
+      ios_simulator:
+        platform: iOS
+        scheme: SpeedDemon
+        command: >
+          xcodebuild
+          -scheme SpeedDemon
+          -project SpeedDemon.xcodeproj
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          -derivedDataPath /tmp/SpeedDemon-DerivedData-ios
+          build
+        log_path: build/validation/build-ios.log
+        artifact_path: build/artifacts/ios
+
+      ios_device:
+        scheme: SpeedDemon
+        platform: iOS
+        command: >
+          xcodebuild build
+          -scheme SpeedDemon
+          -project SpeedDemon.xcodeproj
+          -destination 'generic/platform=iOS'
+          -derivedDataPath /tmp/SpeedDemon-DerivedData-ios-device
+        log_path: build/validation/build-ios-device.log
+        artifact_path: build/artifacts/ios_device
+
+    test:
+      current_state: test_targets_present
+      
+      changed_scope_only_by_default: true
+      
+      full_regression_triggers:
+        - explicit_request
+        - shared_core_logic_changed
+        - schema_changed
+        - configuration_changed
+        - release_build
+      
+      required_preconditions:
+        - retain test outputs under build/tests/
+        - create shared test targets for each supported platform
+      
+      reason: ""
+
+      default_runner_key: ios_sim_small
+
+      full_regression_runner_keys:
+        - ios_sim_small
+        - widget_ios_sim
+ 
+      runners:
+        ios_sim_small:
+          description: iOS simulator test run on iPhone 16e
+          runner_id: ios_sim_small
+          required: true
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_simulator
+          destination: "platform=iOS Simulator,name=iPhone 16e"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS Simulator,name=iPhone 16e'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-ios-small
+          log_path: build/validation/test-ios.log
+          
+        ios_sim_large:
+          description: iOS simulator test run on large phone profile
+          runner_id: ios_sim_large
+          required: true
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_simulator
+          destination: "platform=iOS Simulator,name=iPhone 17 Pro Max"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-ios-large
+          log_path: build/validation/test-ios-large.log
+
+        ios_sim_ipad:
+          description: iOS simulator test run on iPad profile
+          runner_id: ios_sim_ipad
+          required: true
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_simulator
+          destination: "platform=iOS Simulator,name=iPad Air 11-inch (M3)"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS Simulator,name=iPad Air 11-inch (M3)'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-ios-ipad
+          log_path: build/validation/test-ipad-sim.log
+
+        ios_sim_earliest:
+          description: iOS simulator test run pinned to the minimum supported iOS runtime
+          runner_id: ios_sim_earliest
+          required: true
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_simulator
+          destination: "platform=iOS Simulator,name=iPhone 16e,OS=18.4"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.4'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-ios-earliest
+          log_path: build/validation/test-ios-earliest.log
+
+        # Physical devices stay opt-in so default and full regression remain predictable.
+        device_iphone_14_pro:
+          runner_id: device_iphone_14_pro
+          description: Run tests on physical iPhone 14 Pro
+          required: false
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_device
+          destination: "platform=iOS,id=00008120-001A501114D0C01E"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS,id=00008120-001A501114D0C01E'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-iphone-14-pro
+          log_path: build/validation/test-iphone-14-pro.log
+
+        device_ipad_5_air:
+          runner_id: device_ipad_5_air
+          description: Run tests on physical iPad Air 5th gen
+          required: false
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemon
+          requires_build: ios_device
+          destination: "platform=iOS,id=00008103-000934E83E62201E"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemon
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS,id=00008103-000934E83E62201E'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-ipad-air-5
+          log_path: build/validation/test-ipad-air-5.log
+          
+
+        widget_ios_sim:
+          description: Widget extension tests on iOS simulator
+          runner_id: widget_ios_sim
+          required: true
+          timeout_seconds: 600
+          platform: iOS
+          scheme: SpeedDemonWidgetTests
+          requires_build: ios_simulator
+          destination: "platform=iOS Simulator,name=iPhone 16e"
+          command: >
+            xcodebuild test
+            -scheme SpeedDemonWidgetTests
+            -project SpeedDemon.xcodeproj
+            -destination 'platform=iOS Simulator,name=iPhone 16e'
+            -derivedDataPath /tmp/SpeedDemon-DerivedData-test-widget-ios
+          log_path: build/validation/test-widget-ios.log
+
+
+selection:
+  default_profile: speed_demon
+  default_validation_build: ios_simulator
+  changed_scope_tests_only_by_default: true
+  full_regression_triggers:
+    - explicit_request
+    - shared_core_logic_changed
+    - schema_changed
+    - configuration_changed
+    - release_build

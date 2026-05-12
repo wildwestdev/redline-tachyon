@@ -1,0 +1,57 @@
+
+#==============================================================
+#  File: .swiftformat
+#  Project: SpeedDemon
+#
+#  Created by Craig Little on 05/05/2026
+#==============================================================
+
+--swiftversion 5
+--indent 2
+--linebreaks lf
+--tabwidth 2
+--maxwidth 140
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first
+--wrapconditions preserve
+--wrapreturntype preserve
+--wraptypealiases preserve
+--closingparen same-line
+--callsiteparen same-line
+--commas inline
+--trimwhitespace always
+--allman false
+--semicolons never
+--self insert
+--header ignore
+--ifdef no-indent
+--guardelse auto
+--stripunusedargs closure-only
+--funcattributes same-line
+--typeattributes same-line
+--patternlet inline
+--elseposition same-line
+--emptybraces spaced
+--exponentcase lowercase
+--hexgrouping 4,8
+--octalgrouping 4,8
+--binarygrouping 4,8
+--decimalgrouping 3,6
+--fractiongrouping disabled
+--operatorfunc spaced
+--ranges spaced
+--typedelimiter space-after
+--extensionacl on-extension
+--marktypes always
+--markextensions always
+--markcategories false
+--enable blankLinesBetweenScopes
+--enable consecutiveBlankLines
+--disable redundantSelf
+--enable trailingClosures
+--enable wrapMultilineStatementBraces
+--enable sortImports
+--enable docComments
+
+--exclude .build,build,DerivedData
