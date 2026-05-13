@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.0
-//  Last Modified: 11/05/2026
+//  Version: 1.0.76
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -15,6 +15,7 @@
 //  Changes:
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
+//  Craig Little 14/05/2026 Add trip name to Live Activity title and render two-column metric layout for CarPlay value display.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -38,20 +39,47 @@ import WidgetKit
           endPoint: .bottomTrailing)
 
         VStack(spacing: 4) {
-          Text(context.state.tripName.isEmpty ? "Active Trip" : context.state.tripName)
+          Text(context.state.tripName.isEmpty ? "Speed Demon" : "Speed Demon - \(context.state.tripName)")
             .font(.caption2)
             .foregroundStyle(.secondary)
 
-          Text(String(
-            format: "%.1f %@",
-            displaySpeed(from: context),
-            context.state.useImperialUnits ? "mph" : "km/h"))
-            .font(.title.weight(.bold))
-            .monospacedDigit()
+          HStack(alignment: .top, spacing: 24) {
+            VStack(alignment: .leading, spacing: 2) {
+              Text("Distance")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+              Text(distanceString(from: context))
+                .font(.headline.monospacedDigit())
+              Text("Speed")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+              Text(String(
+                format: "%.1f %@",
+                displaySpeed(from: context),
+                context.state.useImperialUnits ? "mph" : "km/h"))
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
+            }
 
-          Text(distanceString(from: context))
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            Spacer(minLength: 0)
+
+            VStack(alignment: .trailing, spacing: 2) {
+              Text("Duration")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+              Text(durationString(from: context))
+                .font(.headline.monospacedDigit())
+              Text("Avg Speed")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+              Text(String(
+                format: "%.1f %@",
+                displayAverageSpeed(from: context),
+                context.state.useImperialUnits ? "mph" : "km/h"))
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
+            }
+          }
         }
         .padding()
       }
@@ -115,5 +143,23 @@ import WidgetKit
     let val = context.state.useImperialUnits ? baseKm * 0.621371 : baseKm
     let unit = context.state.useImperialUnits ? "mi" : "km"
     return String(format: "%.2f %@", val, unit)
+  }
+
+  private func displayAverageSpeed(from context: ActivityViewContext<SpeedDemonActivityAttributes>) -> Double {
+    let kmh = context.state.averageSpeedKmh
+    return context.state.useImperialUnits ? kmh * 0.621371 : kmh
+  }
+
+  private func durationString(from context: ActivityViewContext<SpeedDemonActivityAttributes>) -> String {
+    let seconds = max(0, Int(context.state.durationSeconds.rounded()))
+    let hours = seconds / 3600
+    let minutes = (seconds % 3600) / 60
+    let remainingSeconds = seconds % 60
+
+    if hours > 0 {
+      return String(format: "%d:%02d:%02d", hours, minutes, remainingSeconds)
+    }
+
+    return String(format: "%d:%02d", minutes, remainingSeconds)
   }
 }

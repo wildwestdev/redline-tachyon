@@ -1,6 +1,0 @@
-trip_id,trip_name,trip_distance_m,is_running,session_id,session_start,session_end,session_distance_m,session_start_location,session_end_location
-"BB1AF691-76BE-4112-AE4B-2157A5E9C7C6","Beamer","0.000","false","DB6637A9-6D2D-4520-AD36-2CAB14F2236F","2026-05-11T23:19:35Z","2026-05-11T23:19:41Z","0.000","Glen Innes Rd, Emmaville","Glen Innes Rd, Emmaville"
-"BB1AF691-76BE-4112-AE4B-2157A5E9C7C6","Beamer","0.000","false","DA08F44B-181E-4C2B-BADC-568A1CCDC013","2026-05-11T23:19:56Z","2026-05-11T23:20:12Z","0.000","Glen Innes Rd, Emmaville","Glen Innes Rd, Emmaville"
-"7B0D7F36-08AA-4A1D-A49A-2CDB5196BE68","Missy","0.000","false","","","","","Glen Innes Rd, Emmaville","Glen Innes Rd, Emmaville"
-"60EF741A-3494-4DDD-8D9D-475C6AFE5A59","Tractor","0.000","false","","","","","",""
-"0A4B079D-14D8-4DAB-AE38-1E02A504F9D1","Triton","0.000","false","F53A052B-575C-4343-BC2A-7671BA3CC532","2026-05-12T23:08:37Z","2026-05-12T23:08:38Z","0.000","Glen Innes Rd, Emmaville","Glen Innes Rd, Emmaville"

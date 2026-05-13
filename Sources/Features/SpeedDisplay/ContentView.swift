@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.70
-//  Last Modified: 13/05/2026
+//  Version: 1.0.78
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -22,6 +22,8 @@
 //  Craig Little 13/05/2026 Move DEBUG GPS diagnostics block to Settings under Debug Display toggle.
 //  Craig Little 13/05/2026 Wire customizable runtime thresholds from Settings into auto-pause and sync timer behavior.
 //  Craig Little 13/05/2026 Broaden split-file helper access levels to internal scope to restore build after ContentView extraction.
+//  Craig Little 14/05/2026 Forward trip duration and average speed to Live Activity restore/start flows.
+//  Craig Little 14/05/2026 Fix remaining LiveActivity start call site to use snapshot API after manager signature refactor.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -527,23 +529,31 @@ struct ContentView: View {
     }
 
     if LiveActivityManager.shared.hasActiveActivity {
+      let metrics = liveActivityMetrics(for: activeTrip)
       // Bring the restored activity in sync with current data
       LiveActivityManager.shared.update(
-        speedKmh: locationManager.speedKmh,
-        distanceMeters: activeTrip.distanceMeters,
-        altitudeMeters: locationManager.altitudeMeters,
-        tripName: activeTrip.name,
-        useImperialUnits: useImperialUnits)
+        snapshot: LiveActivitySnapshot(
+          tripName: activeTrip.name,
+          speedKmh: locationManager.speedKmh,
+          distanceMeters: activeTrip.distanceMeters,
+          altitudeMeters: locationManager.altitudeMeters,
+          durationSeconds: metrics.durationSeconds,
+          averageSpeedKmh: metrics.averageSpeedKmh,
+          useImperialUnits: useImperialUnits))
       print("🔄 Synced existing Live Activity with running trip:", activeTrip.name)
     } else {
       // No system activity exists (e.g. user force-quit app, which also kills Live Activities).
       // Start a fresh Live Activity for this running trip.
+      let metrics = liveActivityMetrics(for: activeTrip)
       LiveActivityManager.shared.startActivity(
-        tripName: activeTrip.name,
-        speedKmh: locationManager.speedKmh,
-        distanceMeters: activeTrip.distanceMeters,
-        altitudeMeters: locationManager.altitudeMeters,
-        useImperialUnits: useImperialUnits)
+        snapshot: LiveActivitySnapshot(
+          tripName: activeTrip.name,
+          speedKmh: locationManager.speedKmh,
+          distanceMeters: activeTrip.distanceMeters,
+          altitudeMeters: locationManager.altitudeMeters,
+          durationSeconds: metrics.durationSeconds,
+          averageSpeedKmh: metrics.averageSpeedKmh,
+          useImperialUnits: useImperialUnits))
       print("🚀 Started new Live Activity for running trip:", activeTrip.name)
     }
   }

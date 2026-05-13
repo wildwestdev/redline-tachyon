@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speed Demon Manual</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --card: rgba(30, 41, 59, 0.75);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22d3ee;
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --danger: #f87171;
+      --border: rgba(148, 163, 184, 0.25);
+      --maxw: 1040px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.55;
+      background:
+        radial-gradient(1200px 600px at 10% -20%, #1d4ed8 0%, transparent 55%),
+        radial-gradient(900px 500px at 95% 20%, #0ea5e9 0%, transparent 50%),
+        linear-gradient(165deg, #0b1020 0%, #0f172a 45%, #111827 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.82), rgba(30, 41, 59, 0.72));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    h1, h2, h3 { margin: 0 0 10px; line-height: 1.2; }
+    h1 { font-size: clamp(1.6rem, 4.4vw, 2.6rem); }
+    h2 { font-size: clamp(1.25rem, 3.2vw, 1.8rem); margin-top: 24px; }
+    h3 { font-size: clamp(1.05rem, 2.8vw, 1.25rem); margin-top: 16px; }
+
+    p { margin: 0 0 12px; }
+
+    .sub {
+      color: var(--muted);
+      margin-top: 8px;
+      max-width: 68ch;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .toc {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .toc a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.42);
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+      display: block;
+    }
+
+    .toc a:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      background: rgba(14, 165, 233, 0.12);
+    }
+
+    .section {
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      background: rgba(14, 165, 233, 0.1);
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin: 8px 0 12px;
+    }
+
+    ul, ol { margin: 8px 0 12px 20px; }
+    li { margin: 4px 0; }
+
+    code {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    .kpi {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.42);
+    }
+
+    .kpi .label { color: var(--muted); font-size: 0.88rem; }
+    .kpi .val { font-size: 1.2rem; font-weight: 700; margin-top: 2px; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-right: 10px;
+      margin-bottom: 6px;
+    }
+
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .dot.ok { background: var(--ok); }
+    .dot.warn { background: var(--warn); }
+    .dot.off { background: var(--danger); }
+
+    .footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 16px 12px 36px; }
+      .hero { padding: 18px; }
+      .section { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" id="top">
+      <h1>Speed Demon Manual</h1>
+      <p class="sub">
+        A practical guide to using Speed Demon for real-time driving metrics, trip management,
+        iCloud sync, Live Activities, and CarPlay controls.
+      </p>
+      <div class="meta">
+        <span class="pill">Manual Version: 1.0</span>
+        <span class="pill">App Focus: iPhone + iPad</span>
+        <span class="pill">Sync: SwiftData + CloudKit</span>
+      </div>
+
+      <nav class="toc" aria-label="Table of contents">
+        <a href="#quick-start">Quick Start</a>
+        <a href="#dashboard">Main Dashboard</a>
+        <a href="#trips">Trips and Sessions</a>
+        <a href="#settings">Settings</a>
+        <a href="#sync">Sync and Data</a>
+        <a href="#live">Live Activity + CarPlay</a>
+        <a href="#import-export">Import / Export</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+      </nav>
+    </header>
+
+    <section class="section" id="quick-start">
+      <h2>Quick Start</h2>
+      <ol>
+        <li>Open Speed Demon and grant location permission when prompted.</li>
+        <li>Create or select a trip.</li>
+        <li>Press <strong>Play</strong> to start recording.</li>
+        <li>Drive normally; distance and session metrics update live.</li>
+        <li>Press <strong>Pause</strong> to end the current session.</li>
+      </ol>
+      <div class="note">
+        Only one trip can be active at a time. Starting a new trip automatically pauses any currently active trip.
+      </div>
+    </section>
+
+    <section class="section" id="dashboard">
+      <h2>Main Dashboard</h2>
+      <div class="grid">
+        <div class="kpi">
+          <div class="label">Speed</div>
+          <div class="val">Live km/h or mph</div>
+          <p>Current speed from GPS updates.</p>
+        </div>
+        <div class="kpi">
+          <div class="label">Heading</div>
+          <div class="val">Degrees + Cardinal</div>
+          <p>Direction of travel (for example, <code>135° SE</code>).</p>
+        </div>
+        <div class="kpi">
+          <div class="label">Acceleration</div>
+          <div class="val">m/s² + bar</div>
+          <p>Smoothed acceleration indicator from speed deltas.</p>
+        </div>
+        <div class="kpi">
+          <div class="label">Altitude + Place</div>
+          <div class="val">Live context</div>
+          <p>Altitude plus a reverse-geocoded location summary.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="trips">
+      <h2>Trips and Sessions</h2>
+      <h3>Trip controls</h3>
+      <ul>
+        <li><strong>Play/Pause</strong>: starts or ends the active session.</li>
+        <li><strong>Reset</strong>: resets current session metrics without changing running state.</li>
+        <li><strong>History</strong>: opens detailed session history for that trip.</li>
+        <li><strong>Delete</strong>: removes the trip and all its sessions.</li>
+      </ul>
+
+      <h3>Session behavior</h3>
+      <ul>
+        <li>Pressing <strong>Play</strong> creates a new session with start time and start location.</li>
+        <li>Pressing <strong>Pause</strong> closes the session with end time and end location.</li>
+        <li>Each trip card shows distance, duration, average speed, and session count.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="settings">
+      <h2>Settings</h2>
+      <h3>About</h3>
+      <ul>
+        <li>Shows app version/build in <code>x.y.z</code> format.</li>
+        <li><code>Report an issue</code> opens the public support issue form.</li>
+      </ul>
+
+      <h3>Core options</h3>
+      <ul>
+        <li><strong>Units</strong>: metric or imperial display.</li>
+        <li><strong>Background Tracking</strong>: continue updates while backgrounded.</li>
+        <li><strong>Auto-pause delay</strong>: 0–60 minutes (0 disables auto-pause).</li>
+      </ul>
+
+      <h3>Advanced thresholds</h3>
+      <ul>
+        <li>Auto-pause moving speed threshold</li>
+        <li>Sync save interval</li>
+        <li>Cloud refresh interval</li>
+      </ul>
+
+      <h3>Debug Display</h3>
+      <ul>
+        <li>Shows Motion + Sync status lines when enabled.</li>
+        <li>Can display GPS authorization and accuracy diagnostics.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="sync">
+      <h2>Sync and Data</h2>
+      <p>
+        Speed Demon stores trip data with SwiftData and syncs via CloudKit private database when available.
+      </p>
+
+      <div>
+        <span class="status"><span class="dot ok"></span>Synced</span>
+        <span class="status"><span class="dot warn"></span>Syncing</span>
+        <span class="status"><span class="dot off"></span>Local fallback</span>
+      </div>
+
+      <ul>
+        <li><strong>Synced</strong>: local and cloud state are aligned.</li>
+        <li><strong>Syncing</strong>: upload or refresh is in progress.</li>
+        <li><strong>Local fallback</strong>: cloud unavailable; local persistence continues.</li>
+      </ul>
+
+      <div class="note">
+        Use <strong>Sync Now</strong> in Settings to trigger an immediate sync attempt.
+      </div>
+    </section>
+
+    <section class="section" id="live">
+      <h2>Live Activity and CarPlay</h2>
+      <h3>Live Activity</h3>
+      <ul>
+        <li>Title shows monitored trip name: <code>Speed Demon - TripName</code>.</li>
+        <li>Metrics are shown in two columns:</li>
+      </ul>
+      <div class="grid">
+        <div class="kpi">
+          <div class="label">Left Column</div>
+          <div class="val">Distance, Speed</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Right Column</div>
+          <div class="val">Duration, Avg Speed</div>
+        </div>
+      </div>
+
+      <h3>CarPlay notes</h3>
+      <ul>
+        <li>CarPlay requires Apple-approved entitlement for production use.</li>
+        <li>Without entitlement approval, CarPlay app availability may be limited or hidden.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="import-export">
+      <h2>Import / Export</h2>
+      <ul>
+        <li>Export trips as <strong>JSON</strong> or <strong>CSV</strong>.</li>
+        <li>Import trips from <strong>JSON</strong>.</li>
+        <li>Trip history can be printed from the history screen.</li>
+      </ul>
+      <p>Recommended backup workflow: export JSON periodically and keep a dated archive.</p>
+    </section>
+
+    <section class="section" id="troubleshooting">
+      <h2>Troubleshooting</h2>
+
+      <h3>Trip does not auto-pause</h3>
+      <ul>
+        <li>Check Auto-pause delay is greater than <code>0</code>.</li>
+        <li>Check moving speed threshold is appropriate for your conditions.</li>
+      </ul>
+
+      <h3>Data not syncing between devices</h3>
+      <ul>
+        <li>Confirm same Apple ID on both devices.</li>
+        <li>Ensure iCloud Drive and app iCloud permissions are enabled.</li>
+        <li>Use <strong>Sync Now</strong> from Settings.</li>
+      </ul>
+
+      <h3>Live Activity not updating correctly</h3>
+      <ul>
+        <li>Pause and restart the trip.</li>
+        <li>Ensure Live Activities are enabled in iOS settings for the app.</li>
+      </ul>
+
+      <h3>Support</h3>
+      <p>
+        Public support and bug reports:
+        <a href="https://github.com/wildwestdev/speed-demon-support/issues/new/choose" style="color: var(--accent-2);">
+          GitHub Issue Form
+        </a>
+      </p>
+    </section>
+
+    <p class="footer">
+      Speed Demon Manual • For current operation and feature guidance •
+      <a href="#top" style="color: var(--accent-2);">Back to top</a>
+    </p>
+  </div>
+</body>
+</html>

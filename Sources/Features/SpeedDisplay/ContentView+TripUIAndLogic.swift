@@ -5,8 +5,8 @@
 //  Created by Craig Little on 13/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.68
-//  Last Modified: 13/05/2026
+//  Version: 1.0.79
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -16,6 +16,8 @@
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
 //  Craig Little 13/05/2026 Extract trip UI and logic helpers from ContentView to reduce file and type body size.
+//  Craig Little 14/05/2026 Include duration and average speed in Live Activity payload updates, enforce single active trip by auto-pausing
+//  other running trips before starting a selected trip, and apply the same rule when adding a new trip.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -55,10 +57,12 @@ extension ContentView {
 
                 LiveActivityManager.shared.end()
               } else {
-                trip.isRunning.wrappedValue = true
+                let now = Date()
                 let place = locationManager.currentPlaceSummary
+                pauseOtherRunningTrips(exceptTripID: trip.wrappedValue.id, at: now, place: place)
+                trip.isRunning.wrappedValue = true
                 let newSession = TripSession(
-                  startDate: Date(),
+                  startDate: now,
                   startLocationDescription: place.isEmpty ? nil : place)
                 trip.sessions.wrappedValue.append(newSession)
 
@@ -67,11 +71,14 @@ extension ContentView {
                 }
 
                 LiveActivityManager.shared.startActivity(
-                  tripName: trip.wrappedValue.name,
-                  speedKmh: 0,
-                  distanceMeters: trip.wrappedValue.distanceMeters,
-                  altitudeMeters: locationManager.altitudeMeters,
-                  useImperialUnits: useImperialUnits)
+                  snapshot: LiveActivitySnapshot(
+                    tripName: trip.wrappedValue.name,
+                    speedKmh: 0,
+                    distanceMeters: trip.wrappedValue.distanceMeters,
+                    altitudeMeters: locationManager.altitudeMeters,
+                    durationSeconds: 0,
+                    averageSpeedKmh: 0,
+                    useImperialUnits: useImperialUnits))
               }
             } label: {
               Image(systemName: trip.isRunning.wrappedValue ? "pause.fill" : "play.fill")
@@ -110,12 +117,16 @@ extension ContentView {
                   trip.wrappedValue.endLocationDescription = nil
                 }
 
+                let metrics = liveActivityMetrics(for: trip.wrappedValue)
                 LiveActivityManager.shared.update(
-                  speedKmh: locationManager.speedKmh,
-                  distanceMeters: 0,
-                  altitudeMeters: locationManager.altitudeMeters,
-                  tripName: trip.wrappedValue.name,
-                  useImperialUnits: useImperialUnits)
+                  snapshot: LiveActivitySnapshot(
+                    tripName: trip.wrappedValue.name,
+                    speedKmh: locationManager.speedKmh,
+                    distanceMeters: 0,
+                    altitudeMeters: locationManager.altitudeMeters,
+                    durationSeconds: metrics.durationSeconds,
+                    averageSpeedKmh: metrics.averageSpeedKmh,
+                    useImperialUnits: useImperialUnits))
               } else if let lastIndex = trip.sessions.wrappedValue.indices.last {
                 let existing = trip.sessions.wrappedValue[lastIndex]
                 trip.sessions.wrappedValue[lastIndex] = TripSession(
@@ -253,8 +264,31 @@ extension ContentView {
   // MARK: - Logic
 
   func addTrip() {
+    let now = Date()
+    let place = locationManager.currentPlaceSummary
+    pauseOtherRunningTrips(exceptTripID: UUID(), at: now, place: place)
+
     let newName = "Trip \(tripStore.trips.count + 1)"
-    tripStore.trips.append(Trip(name: newName))
+    let newTrip = Trip(
+      name: newName,
+      isRunning: true,
+      sessions: [
+        TripSession(
+          startDate: now,
+          startLocationDescription: place.isEmpty ? nil : place)
+      ])
+    tripStore.trips.append(newTrip)
+
+    let metrics = liveActivityMetrics(for: newTrip)
+    LiveActivityManager.shared.startActivity(
+      snapshot: LiveActivitySnapshot(
+        tripName: newTrip.name,
+        speedKmh: locationManager.speedKmh,
+        distanceMeters: newTrip.distanceMeters,
+        altitudeMeters: locationManager.altitudeMeters,
+        durationSeconds: metrics.durationSeconds,
+        averageSpeedKmh: metrics.averageSpeedKmh,
+        useImperialUnits: useImperialUnits))
   }
 
   func updateTrips(with delta: Double) {
@@ -280,17 +314,47 @@ extension ContentView {
     }
 
     if let activeTrip = tripStore.trips.first(where: { $0.isRunning }) {
+      let metrics = liveActivityMetrics(for: activeTrip)
       LiveActivityManager.shared.update(
-        speedKmh: locationManager.speedKmh,
-        distanceMeters: activeTrip.distanceMeters,
-        altitudeMeters: locationManager.altitudeMeters,
-        tripName: activeTrip.name,
-        useImperialUnits: useImperialUnits)
+        snapshot: LiveActivitySnapshot(
+          tripName: activeTrip.name,
+          speedKmh: locationManager.speedKmh,
+          distanceMeters: activeTrip.distanceMeters,
+          altitudeMeters: locationManager.altitudeMeters,
+          durationSeconds: metrics.durationSeconds,
+          averageSpeedKmh: metrics.averageSpeedKmh,
+          useImperialUnits: useImperialUnits))
     }
 
     let anyRunning = tripStore.trips.contains(where: \.isRunning)
     if !anyRunning {
       LiveActivityManager.shared.end()
+    }
+  }
+
+  func liveActivityMetrics(for trip: Trip) -> (durationSeconds: Double, averageSpeedKmh: Double) {
+    let totalDurationSeconds = trip.sessions.reduce(0.0) { $0 + $1.duration }
+    let totalHours = totalDurationSeconds / 3600.0
+    let averageSpeedKmh = totalHours > 0 ? (trip.distanceMeters / 1000.0) / totalHours : 0
+    return (totalDurationSeconds, averageSpeedKmh)
+  }
+
+  func pauseOtherRunningTrips(exceptTripID: UUID, at now: Date, place: String) {
+    for index in tripStore.trips.indices {
+      guard tripStore.trips[index].id != exceptTripID, tripStore.trips[index].isRunning else {
+        continue
+      }
+
+      tripStore.trips[index].isRunning = false
+
+      if let openIndex = tripStore.trips[index].sessions.lastIndex(where: { $0.endDate == nil }) {
+        tripStore.trips[index].sessions[openIndex].endDate = now
+
+        if !place.isEmpty {
+          tripStore.trips[index].sessions[openIndex].endLocationDescription = place
+          tripStore.trips[index].endLocationDescription = place
+        }
+      }
     }
   }
 }

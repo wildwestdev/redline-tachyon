@@ -5,8 +5,8 @@
 //  Created by Craig Little on 12/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.75
-//  Last Modified: 13/05/2026
+//  Version: 1.0.76
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -20,6 +20,7 @@
 //  Craig Little 13/05/2026 Make auto-pause speed-driven for deterministic behavior during sustained stationary periods.
 //  Craig Little 13/05/2026 Use configurable moving-speed threshold, align header version with project build, and reorder/flatten helper
 //  types for SwiftLint file type order compliance, split-file build access fixes, and restore AutoPauseCoordinator for tests.
+//  Craig Little 14/05/2026 Include live trip duration and average speed when resuming auto-paused Live Activity.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -213,12 +214,16 @@ extension ContentView {
       place: place)
 
     if let resumedTrip {
+      let metrics = liveActivityMetrics(for: resumedTrip)
       LiveActivityManager.shared.startActivity(
-        tripName: resumedTrip.name,
-        speedKmh: locationManager.speedKmh,
-        distanceMeters: resumedTrip.distanceMeters,
-        altitudeMeters: locationManager.altitudeMeters,
-        useImperialUnits: useImperialUnits)
+        snapshot: LiveActivitySnapshot(
+          tripName: resumedTrip.name,
+          speedKmh: locationManager.speedKmh,
+          distanceMeters: resumedTrip.distanceMeters,
+          altitudeMeters: locationManager.altitudeMeters,
+          durationSeconds: metrics.durationSeconds,
+          averageSpeedKmh: metrics.averageSpeedKmh,
+          useImperialUnits: useImperialUnits))
     }
   }
 }

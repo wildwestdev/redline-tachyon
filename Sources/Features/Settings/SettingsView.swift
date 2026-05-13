@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.70
-//  Last Modified: 13/05/2026
+//  Version: 1.0.76
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -25,6 +25,8 @@
 //  into Debug Display section.
 //  Craig Little 13/05/2026 Replace Auto Pause wheel picker with +/- stepper control for consistency.
 //  Craig Little 13/05/2026 Broaden shared SettingsView helper-member scope for split-file access after build errors.
+//  Craig Little 14/05/2026 Add version/build display and Report an issue button to Settings, and extract About section for lint body-size
+//  compliance.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -57,6 +59,7 @@ struct SettingsView: View {
   @StateObject var locationManager = LocationManager.shared
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.openURL) private var openURL
 
   var body: some View {
     NavigationStack {
@@ -64,6 +67,8 @@ struct SettingsView: View {
         GlassContainer(spacing: GlassTheme.Spacing.large) {
           ScrollView {
             VStack(alignment: .leading, spacing: GlassTheme.Spacing.large) {
+              aboutSection(openURL: openURL)
+
               glassSection(title: "Units") {
                 Toggle(isOn: $useImperialUnits) {
                   VStack(alignment: .leading) {

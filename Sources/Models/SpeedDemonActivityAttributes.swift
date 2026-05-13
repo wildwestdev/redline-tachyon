@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.0
-//  Last Modified: 11/05/2026
+//  Version: 1.0.76
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -15,6 +15,7 @@
 //  Changes:
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
+//  Craig Little 14/05/2026 Add duration and average speed fields for richer Live Activity and CarPlay presentation.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -30,6 +31,8 @@ struct SpeedDemonActivityAttributes: ActivityAttributes {
     var tripName: String
     var useImperialUnits: Bool
     var altitudeMeters: Double
+    var durationSeconds: Double
+    var averageSpeedKmh: Double
   }
 
   /// Static attributes (don’t change during the activity)

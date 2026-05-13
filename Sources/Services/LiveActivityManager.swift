@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.1
-//  Last Modified: 11/05/2026
+//  Version: 1.0.80
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -15,6 +15,7 @@
 //  Changes:
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
+//  Craig Little 14/05/2026 Add duration and average-speed payload fields, and enforce single Live Activity instance by reusing/deduping.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -22,6 +23,16 @@
 //
 import ActivityKit
 import Foundation
+
+struct LiveActivitySnapshot {
+  let tripName: String
+  let speedKmh: Double
+  let distanceMeters: Double
+  let altitudeMeters: Double
+  let durationSeconds: Double
+  let averageSpeedKmh: Double
+  let useImperialUnits: Bool
+}
 
 final class LiveActivityManager {
   static let shared = LiveActivityManager()
@@ -42,13 +53,7 @@ final class LiveActivityManager {
     }
   }
 
-  func startActivity(
-    tripName: String,
-    speedKmh: Double,
-    distanceMeters: Double,
-    altitudeMeters: Double,
-    useImperialUnits: Bool)
-  {
+  func startActivity(snapshot: LiveActivitySnapshot) {
     let authInfo = ActivityAuthorizationInfo()
     print("🔍 ActivityAuthorizationInfo =", authInfo)
     print("🔍 areActivitiesEnabled =", authInfo.areActivitiesEnabled)
@@ -58,15 +63,20 @@ final class LiveActivityManager {
       return
     }
 
-    let attributes = SpeedDemonActivityAttributes(id: UUID())
-    let contentState = SpeedDemonActivityAttributes.ContentState(
-      speedKmh: speedKmh,
-      distanceKm: distanceMeters / 1000.0,
-      tripName: tripName,
-      useImperialUnits: useImperialUnits,
-      altitudeMeters: altitudeMeters)
+    let content = makeContent(from: snapshot)
+    let existingActivities = Activity<SpeedDemonActivityAttributes>.activities
 
-    let content = ActivityContent(state: contentState, staleDate: nil)
+    if let primary = existingActivities.first {
+      activity = primary
+      Task {
+        await activity?.update(content)
+        await endDuplicateActivities(keeping: primary.id)
+        print("ℹ️ Reused existing Live Activity and ended duplicates.")
+      }
+      return
+    }
+
+    let attributes = SpeedDemonActivityAttributes(id: UUID())
 
     do {
       let newActivity = try Activity.request(
@@ -80,43 +90,57 @@ final class LiveActivityManager {
     }
   }
 
-  func update(
-    speedKmh: Double,
-    distanceMeters: Double,
-    altitudeMeters: Double,
-    tripName: String,
-    useImperialUnits: Bool)
-  {
+  func update(snapshot: LiveActivitySnapshot) {
+    if activity == nil {
+      activity = Activity<SpeedDemonActivityAttributes>.activities.first
+    }
+
     guard let activity else {
       print("⚠️ Tried to update Live Activity, but none is active.")
       return
     }
 
-    let contentState = SpeedDemonActivityAttributes.ContentState(
-      speedKmh: speedKmh,
-      distanceKm: distanceMeters / 1000.0,
-      tripName: tripName,
-      useImperialUnits: useImperialUnits,
-      altitudeMeters: altitudeMeters)
-
-    let content = ActivityContent(state: contentState, staleDate: nil)
+    let content = makeContent(from: snapshot)
 
     Task {
       await activity.update(content)
+      await endDuplicateActivities(keeping: activity.id)
       print("ℹ️ Live Activity updated.")
     }
   }
 
   func end() {
-    guard let activity else {
+    let allActivities = Activity<SpeedDemonActivityAttributes>.activities
+    guard !allActivities.isEmpty else {
+      activity = nil
       print("ℹ️ end() called, but no activity to end.")
       return
     }
 
     Task {
-      await activity.end(nil, dismissalPolicy: .immediate)
-      print("🛑 Live Activity ended.")
+      for activity in allActivities {
+        await activity.end(nil, dismissalPolicy: .immediate)
+      }
+      print("🛑 Ended all Live Activities.")
       self.activity = nil
+    }
+  }
+
+  private func makeContent(from snapshot: LiveActivitySnapshot) -> ActivityContent<SpeedDemonActivityAttributes.ContentState> {
+    let contentState = SpeedDemonActivityAttributes.ContentState(
+      speedKmh: snapshot.speedKmh,
+      distanceKm: snapshot.distanceMeters / 1000.0,
+      tripName: snapshot.tripName,
+      useImperialUnits: snapshot.useImperialUnits,
+      altitudeMeters: snapshot.altitudeMeters,
+      durationSeconds: snapshot.durationSeconds,
+      averageSpeedKmh: snapshot.averageSpeedKmh)
+    return ActivityContent(state: contentState, staleDate: nil)
+  }
+
+  private func endDuplicateActivities(keeping primaryID: String) async {
+    for duplicate in Activity<SpeedDemonActivityAttributes>.activities where duplicate.id != primaryID {
+      await duplicate.end(nil, dismissalPolicy: .immediate)
     }
   }
 }

@@ -5,8 +5,8 @@
 //  Created by Craig Little on 13/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.72
-//  Last Modified: 13/05/2026
+//  Version: 1.0.76
+//  Last Modified: 14/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -17,6 +17,8 @@
 //  ----------------------------------------------------------------------------------
 //  Craig Little 13/05/2026 Extract diagnostics and row builders from SettingsView to satisfy type size and ordering lint rules.
 //  Craig Little 13/05/2026 Add CoreLocation import for authorization/accuracy enum access in helper properties.
+//  Craig Little 14/05/2026 Add app version/build and support issue URL helpers for Settings About section.
+//  Craig Little 14/05/2026 Extract Settings About section view builder to reduce SettingsView type body length.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -64,7 +66,36 @@ extension SettingsView {
       : "Local-only fallback (CloudKit unavailable)"
   }
 
+  var appVersionBuildText: String {
+    let marketingVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0"
+    let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+    return "\(marketingVersion).\(buildNumber)"
+  }
+
+  var issueReporterURL: URL? {
+    URL(string: "https://github.com/wildwestdev/speed-demon-support/issues/new/choose")
+  }
+
   // MARK: - Reusable Glass Section Builder
+
+  func aboutSection(openURL: OpenURLAction) -> some View {
+    glassSection(title: "About") {
+      Text("Version \(appVersionBuildText)")
+        .font(.subheadline.weight(.medium))
+        .foregroundStyle(GlassTheme.primaryText)
+
+      Button {
+        guard let issueReporterURL else {
+          return
+        }
+        openURL(issueReporterURL)
+      } label: {
+        Label("Report an issue", systemImage: "exclamationmark.bubble")
+          .foregroundStyle(GlassTheme.primaryText)
+      }
+      .buttonStyle(GlassButtonStyle())
+    }
+  }
 
   func glassSection(
     title: String,

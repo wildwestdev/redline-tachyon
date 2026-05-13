@@ -143,6 +143,12 @@ When data or state logic changes, agents must verify as applicable:
 
 Do not introduce network, sync, telemetry, or cloud behavior unless explicitly requested.
 
+For trip runtime behavior:
+
+- Only one trip may be active (`isRunning == true`) at a time.
+- Starting a trip while another is active must first pause/close the currently active trip session, then start the selected trip.
+- Live Activity content must stay aligned with trip state transitions (start/pause/resume/reset), including duration and average speed fields when present.
+
 ---
 
 ## User Interface Rules
