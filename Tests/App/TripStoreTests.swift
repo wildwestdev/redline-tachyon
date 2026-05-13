@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.47
-//  Last Modified: 12/05/2026
+//  Version: 1.0.53
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -22,6 +22,7 @@
 //  Craig Little 12/05/2026 Remove @MainActor isolation from TripStoreTests to reduce device XCTest host runtime crash risk.
 //  Craig Little 12/05/2026 Skip TripStoreTests on physical iPad due to repeatable XCTest host allocator crash path.
 //  Craig Little 12/05/2026 Add targeted tests for deferred persistence while active and explicit flush triggers.
+//  Craig Little 13/05/2026 Add startup normalization coverage to ensure synced running trips load paused with closed sessions.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -195,11 +196,14 @@ final class TripStoreTests: XCTestCase {
     let store = TripStore(persistence: persistence)
     persistence.replaceCallCount = 0
 
+    // Startup normalization now pauses running trips and closes open sessions on load.
+    XCTAssertFalse(store.trips[0].isRunning)
+
     store.toggleTripRunningState(tripID: tripID)
     store.setPersistenceActive(false)
 
-    XCTAssertFalse(store.trips[0].isRunning)
-    XCTAssertNotNil(store.trips[0].sessions[0].endDate)
+    XCTAssertTrue(store.trips[0].isRunning)
+    XCTAssertNil(store.trips[0].sessions.last?.endDate)
     XCTAssertEqual(persistence.replaceCallCount, 1)
   }
 
@@ -219,5 +223,26 @@ final class TripStoreTests: XCTestCase {
     XCTAssertFalse(store.trips[0].isRunning)
     XCTAssertTrue(store.trips[0].sessions.isEmpty)
     XCTAssertEqual(persistence.replaceCallCount, 0)
+  }
+
+  func testInitPausesRunningTripsAndClosesOpenSessionsFromPersistence() {
+    let tripID = UUID()
+    let openSession = TripSession(
+      startDate: Date().addingTimeInterval(-180),
+      endDate: nil,
+      distanceMeters: 250)
+    let persistence = MockPersistence(storedTrips: [
+      Trip(id: tripID, name: "Synced Active", distanceMeters: 250, isRunning: true, sessions: [openSession])
+    ])
+    self.persistence = persistence
+
+    let store = TripStore(persistence: persistence)
+
+    XCTAssertEqual(store.trips.count, 1)
+    XCTAssertFalse(store.trips[0].isRunning)
+    XCTAssertNotNil(store.trips[0].sessions[0].endDate)
+    XCTAssertEqual(persistence.replaceCallCount, 1)
+    XCTAssertFalse(persistence.storedTrips[0].isRunning)
+    XCTAssertNotNil(persistence.storedTrips[0].sessions[0].endDate)
   }
 }

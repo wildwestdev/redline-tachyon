@@ -5,8 +5,8 @@
 //  Created by Craig Little on 12/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.42
-//  Last Modified: 12/05/2026
+//  Version: 1.0.75
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -16,6 +16,10 @@
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
 //  Craig Little 12/05/2026 Move auto-pause/idle-lock helpers and add formatter helpers for motion/sync status test coverage.
+//  Craig Little 13/05/2026 Prevent motion-sensor false positives from blocking auto-pause when speed remains near zero.
+//  Craig Little 13/05/2026 Make auto-pause speed-driven for deterministic behavior during sustained stationary periods.
+//  Craig Little 13/05/2026 Use configurable moving-speed threshold, align header version with project build, and reorder/flatten helper
+//  types for SwiftLint file type order compliance, split-file build access fixes, and restore AutoPauseCoordinator for tests.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -48,6 +52,20 @@ private struct GlassGlimmerAppearModifier: ViewModifier {
         radius: 16,
         x: 0,
         y: 0)
+  }
+}
+
+enum StatusLineFormatter {
+  static func motionStatusText(displayMotion: Bool, isLikelyMoving: Bool) -> String? {
+    guard displayMotion else {
+      return nil
+    }
+
+    return isLikelyMoving ? "Motion: moving" : "Motion: still"
+  }
+
+  static func syncStatusText(syncStatus: TripSyncStatus) -> String {
+    "Sync: \(syncStatus.displayText)"
   }
 }
 
@@ -146,20 +164,6 @@ enum AutoPauseCoordinator {
   }
 }
 
-enum StatusLineFormatter {
-  static func motionStatusText(displayMotion: Bool, isLikelyMoving: Bool) -> String? {
-    guard displayMotion else {
-      return nil
-    }
-
-    return isLikelyMoving ? "Motion: moving" : "Motion: still"
-  }
-
-  static func syncStatusText(syncStatus: TripSyncStatus) -> String {
-    "Sync: \(syncStatus.displayText)"
-  }
-}
-
 extension ContentView {
   func updateIdleLockState() {
     let hasRunningTrip = tripStore.trips.contains(where: \.isRunning)
@@ -167,8 +171,8 @@ extension ContentView {
   }
 
   func evaluateAutoPauseResume(at now: Date) {
-    let movingSpeedThresholdKmh = 3.0
-    let isMoving = locationManager.speedKmh >= movingSpeedThresholdKmh || locationManager.isLikelyMoving
+    let isMoving = locationManager.speedKmh >= autoPauseMovingSpeedThresholdKmh
+
     let transition = AutoPauseCoordinator.evaluateStationaryTransition(
       now: now,
       autoPauseMinutes: autoPauseMinutes,

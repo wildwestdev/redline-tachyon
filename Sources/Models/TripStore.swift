@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.47
-//  Last Modified: 12/05/2026
+//  Version: 1.0.59
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -24,6 +24,10 @@
 //  Craig Little 12/05/2026 Wire CloudKit event observation with main-thread delivery and active refresh polling for HAR-style sync.
 //  Craig Little 12/05/2026 Add forceSyncNow action to flush pending changes and immediately refresh persisted cloud-backed trips.
 //  Craig Little 12/05/2026 Add import/replace helpers for manual trip JSON import and explicit persistence flush behavior tests.
+//  Craig Little 13/05/2026 Show Uploading state only for local pending writes; keep background CloudKit exports from flickering sync
+//  status.
+//  Craig Little 13/05/2026 Force all trips to paused state on app startup/refresh so timers never auto-resume from synced state.
+//  Craig Little 13/05/2026 Add configurable save/refresh sync timer intervals and runtime apply hook for Settings thresholds.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -54,6 +58,11 @@ enum TripSyncStatus {
 }
 
 class TripStore: ObservableObject {
+  private enum SettingsKeys {
+    static let syncSaveIntervalSeconds = "syncSaveIntervalSeconds"
+    static let cloudRefreshIntervalSeconds = "cloudRefreshIntervalSeconds"
+  }
+
   static let shared = TripStore()
   @Published var trips: [Trip] = [] {
     didSet {
@@ -71,10 +80,16 @@ class TripStore: ObservableObject {
   private var cloudRefreshTimer: Timer?
   private var cloudEventCancellable: AnyCancellable?
   private let isRunningUnitTests: Bool
+  private var periodicSaveIntervalSeconds: Double = 30
+  private var cloudRefreshIntervalSeconds: Double = 5
 
   init(persistence: TripPersisting = SwiftDataTripPersistence.shared) {
     self.persistence = persistence
     isRunningUnitTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    periodicSaveIntervalSeconds = UserDefaults.standard.object(
+      forKey: SettingsKeys.syncSaveIntervalSeconds) as? Double ?? 30
+    cloudRefreshIntervalSeconds = UserDefaults.standard.object(
+      forKey: SettingsKeys.cloudRefreshIntervalSeconds) as? Double ?? 5
     syncStatus = persistence.isCloudBacked ? .cloudConnected : .localFallback
 
     if !isRunningUnitTests {
@@ -122,12 +137,18 @@ class TripStore: ObservableObject {
   }
 
   private func loadTrips() {
-    trips = persistence.loadTrips()
+    let loadedTrips = persistence.loadTrips()
+    let (startupPausedTrips, didPauseAny) = makePausedSnapshot(from: loadedTrips, now: Date())
+    trips = startupPausedTrips
+
+    if didPauseAny {
+      persistence.replaceTrips(with: startupPausedTrips)
+    }
   }
 
   private func startPeriodicSaveTimer() {
     periodicSaveTimer?.invalidate()
-    periodicSaveTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+    periodicSaveTimer = Timer.scheduledTimer(withTimeInterval: periodicSaveIntervalSeconds, repeats: true) { [weak self] _ in
       guard let self, self.isPersistenceActive else {
         return
       }
@@ -142,7 +163,7 @@ class TripStore: ObservableObject {
     }
 
     cloudRefreshTimer?.invalidate()
-    cloudRefreshTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+    cloudRefreshTimer = Timer.scheduledTimer(withTimeInterval: cloudRefreshIntervalSeconds, repeats: true) { [weak self] _ in
       guard
         let self,
         self.isPersistenceActive,
@@ -179,6 +200,8 @@ class TripStore: ObservableObject {
     }
 
     switch event.type {
+    case .setup:
+      syncStatus = hasPendingPersistenceChanges ? .uploading : .cloudConnected
     case .import:
       if event.endDate == nil {
         syncStatus = .importing
@@ -187,11 +210,7 @@ class TripStore: ObservableObject {
         syncStatus = hasPendingPersistenceChanges ? .uploading : .cloudConnected
       }
     case .export:
-      if event.endDate == nil {
-        syncStatus = .uploading
-      } else {
-        syncStatus = hasPendingPersistenceChanges ? .uploading : .cloudConnected
-      }
+      syncStatus = hasPendingPersistenceChanges ? .uploading : .cloudConnected
     @unknown default:
       syncStatus = hasPendingPersistenceChanges ? .uploading : .cloudConnected
     }
@@ -236,6 +255,27 @@ class TripStore: ObservableObject {
     trips = newTrips
   }
 
+  /// Applies runtime-configurable sync timing thresholds from Settings.
+  func applySyncTimingSettings(saveIntervalSeconds: Double, cloudRefreshIntervalSeconds: Double) {
+    let resolvedSave = max(5, min(120, saveIntervalSeconds))
+    let resolvedRefresh = max(2, min(60, cloudRefreshIntervalSeconds))
+
+    let didChange =
+      self.periodicSaveIntervalSeconds != resolvedSave ||
+      self.cloudRefreshIntervalSeconds != resolvedRefresh
+    guard didChange else {
+      return
+    }
+
+    self.periodicSaveIntervalSeconds = resolvedSave
+    self.cloudRefreshIntervalSeconds = resolvedRefresh
+
+    if !isRunningUnitTests {
+      startPeriodicSaveTimer()
+      startCloudRefreshTimer()
+    }
+  }
+
   // MARK: - CarPlay Actions
 
   /// Toggles running state for the trip with the matching identifier.
@@ -257,5 +297,26 @@ class TripStore: ObservableObject {
     }
 
     trips[index] = updatedTrip
+  }
+
+  private func makePausedSnapshot(from sourceTrips: [Trip], now: Date) -> ([Trip], Bool) {
+    var didPauseAny = false
+    let pausedTrips = sourceTrips.map { trip -> Trip in
+      var updated = trip
+
+      if updated.isRunning {
+        updated.isRunning = false
+        didPauseAny = true
+      }
+
+      for sessionIndex in updated.sessions.indices where updated.sessions[sessionIndex].endDate == nil {
+        updated.sessions[sessionIndex].endDate = now
+        didPauseAny = true
+      }
+
+      return updated
+    }
+
+    return (pausedTrips, didPauseAny)
   }
 }

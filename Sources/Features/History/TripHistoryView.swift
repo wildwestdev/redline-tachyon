@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.47
-//  Last Modified: 12/05/2026
+//  Version: 1.0.52
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -16,6 +16,7 @@
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
 //  Craig Little 12/05/2026 Add print-history toolbar action using formatted trip session output.
+//  Craig Little 13/05/2026 Print history via text formatter to avoid protected-document print pipeline errors.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -237,7 +238,11 @@ struct TripHistoryView: View {
     info.outputType = .general
     info.jobName = trip.name.isEmpty ? "Trip History" : "\(trip.name) History"
     printController.printInfo = info
-    printController.printingItem = printableText
+    printController.printingItem = nil
+    printController.printingItems = nil
+    let formatter = UISimpleTextPrintFormatter(text: printableText)
+    formatter.startPage = 0
+    printController.printFormatter = formatter
     printController.present(animated: true) { _, completed, error in
       if completed {
         showToast("Print started 🖨️")

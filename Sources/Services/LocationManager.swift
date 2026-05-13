@@ -5,8 +5,8 @@
 //  Created by Craig Little on 11/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.1
-//  Last Modified: 11/05/2026
+//  Version: 1.0.59
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -15,6 +15,8 @@
 //  Changes:
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
+//  Craig Little 13/05/2026 Expose GPS diagnostics fields for debug display (auth + accuracy metrics).
+//  Craig Little 13/05/2026 Add one-shot location refresh helper for periodic debug diagnostics updates.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -36,6 +38,10 @@ final class LocationManager: NSObject, ObservableObject {
   @Published var currentRoad: String = ""
   @Published var currentTown: String = ""
   @Published var isLikelyMoving: Bool = false
+  @Published var accuracyAuthorization: CLAccuracyAuthorization = .reducedAccuracy
+  @Published var horizontalAccuracy: Double = 0
+  @Published var verticalAccuracy: Double = 0
+  @Published var speedAccuracy: Double = 0
 
   var currentPlaceSummary: String {
     if !currentRoad.isEmpty, !currentTown.isEmpty {
@@ -107,11 +113,20 @@ final class LocationManager: NSObject, ObservableObject {
     manager.allowsBackgroundLocationUpdates = enabled
     manager.showsBackgroundLocationIndicator = enabled
   }
+
+  func requestOneShotLocationUpdate() {
+    guard authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse else {
+      return
+    }
+
+    manager.requestLocation()
+  }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     authorizationStatus = manager.authorizationStatus
+    accuracyAuthorization = manager.accuracyAuthorization
 
     switch authorizationStatus {
     case .authorizedWhenInUse, .authorizedAlways:
@@ -145,6 +160,10 @@ extension LocationManager: CLLocationManagerDelegate {
     DispatchQueue.main.async {
       self.speedKmh = computedSpeedKmh
       self.altitudeMeters = newLocation.altitude
+      self.horizontalAccuracy = newLocation.horizontalAccuracy
+      self.verticalAccuracy = newLocation.verticalAccuracy
+      self.speedAccuracy = newLocation.speedAccuracy
+      self.accuracyAuthorization = self.manager.accuracyAuthorization
 
       if rawSpeed >= self.stationarySpeedThreshold {
         self.lastSpeedUpdateTime = Date()

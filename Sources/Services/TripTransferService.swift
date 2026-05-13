@@ -5,8 +5,8 @@
 //  Created by Craig Little on 12/05/2026
 //  © 2026 Craig Little. All rights reserved.
 //
-//  Version: 1.0.47
-//  Last Modified: 12/05/2026
+//  Version: 1.0.67
+//  Last Modified: 13/05/2026
 //  Maintainer: Craig Little
 //
 //  Description:
@@ -16,6 +16,8 @@
 //  Author  Date        Change
 //  ----------------------------------------------------------------------------------
 //  Craig Little 12/05/2026 Add trip JSON/CSV export, JSON import, and print-history text formatting helpers.
+//  Craig Little 13/05/2026 Reorder supporting types and wrap CSV header literal to satisfy SwiftLint ordering and line-length rules, and
+//  align header version with project build.
 //==============================================================
 //
 // SPDX-FileCopyrightText: 2026 Craig Little
@@ -29,6 +31,66 @@ struct TripTransferEnvelope: Codable {
   let schemaVersion: Int
   let exportedAt: Date
   let trips: [Trip]
+}
+
+struct TripJSONDocument: FileDocument {
+  static var readableContentTypes: [UTType] {
+    [.json]
+  }
+
+  static var writableContentTypes: [UTType] {
+    [.json]
+  }
+
+  let data: Data
+
+  init(data: Data = Data()) {
+    self.data = data
+  }
+
+  init(configuration: ReadConfiguration) throws {
+    guard let fileData = configuration.file.regularFileContents else {
+      throw CocoaError(.fileReadCorruptFile)
+    }
+    data = fileData
+  }
+
+  func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
+    FileWrapper(regularFileWithContents: data)
+  }
+}
+
+struct TripCSVDocument: FileDocument {
+  static var readableContentTypes: [UTType] {
+    [.commaSeparatedText]
+  }
+
+  static var writableContentTypes: [UTType] {
+    [.commaSeparatedText]
+  }
+
+  let text: String
+
+  init(text: String = "") {
+    self.text = text
+  }
+
+  init(configuration: ReadConfiguration) throws {
+    guard
+      let fileData = configuration.file.regularFileContents,
+      let string = String(data: fileData, encoding: .utf8)
+    else {
+      throw CocoaError(.fileReadCorruptFile)
+    }
+    text = string
+  }
+
+  func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
+    guard let data = text.data(using: .utf8) else {
+      throw CocoaError(.fileWriteUnknown)
+    }
+    return FileWrapper(regularFileWithContents: data)
+  }
 }
 
 enum TripTransferService {
@@ -45,9 +107,19 @@ enum TripTransferService {
 
   static func exportCSVString(trips: [Trip]) -> String {
     var rows: [String] = []
-    rows
-      .append(
-        "trip_id,trip_name,trip_distance_m,is_running,session_id,session_start,session_end,session_distance_m,session_start_location,session_end_location")
+    rows.append(
+      [
+        "trip_id",
+        "trip_name",
+        "trip_distance_m",
+        "is_running",
+        "session_id",
+        "session_start",
+        "session_end",
+        "session_distance_m",
+        "session_start_location",
+        "session_end_location"
+      ].joined(separator: ","))
 
     let iso = ISO8601DateFormatter()
 
@@ -155,65 +227,5 @@ enum TripTransferService {
       return String(format: "%d:%02d:%02d", hours, minutes, seconds)
     }
     return String(format: "%d:%02d", minutes, seconds)
-  }
-}
-
-struct TripJSONDocument: FileDocument {
-  static var readableContentTypes: [UTType] {
-    [.json]
-  }
-
-  static var writableContentTypes: [UTType] {
-    [.json]
-  }
-
-  let data: Data
-
-  init(data: Data = Data()) {
-    self.data = data
-  }
-
-  init(configuration: ReadConfiguration) throws {
-    guard let fileData = configuration.file.regularFileContents else {
-      throw CocoaError(.fileReadCorruptFile)
-    }
-    data = fileData
-  }
-
-  func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
-    FileWrapper(regularFileWithContents: data)
-  }
-}
-
-struct TripCSVDocument: FileDocument {
-  static var readableContentTypes: [UTType] {
-    [.commaSeparatedText]
-  }
-
-  static var writableContentTypes: [UTType] {
-    [.commaSeparatedText]
-  }
-
-  let text: String
-
-  init(text: String = "") {
-    self.text = text
-  }
-
-  init(configuration: ReadConfiguration) throws {
-    guard
-      let fileData = configuration.file.regularFileContents,
-      let string = String(data: fileData, encoding: .utf8)
-    else {
-      throw CocoaError(.fileReadCorruptFile)
-    }
-    text = string
-  }
-
-  func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
-    guard let data = text.data(using: .utf8) else {
-      throw CocoaError(.fileWriteUnknown)
-    }
-    return FileWrapper(regularFileWithContents: data)
   }
 }
